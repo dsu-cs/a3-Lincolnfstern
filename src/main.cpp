@@ -4,6 +4,7 @@
 #include <iomanip>
 #include <vector>
 #include "bst.hpp"     // The header file for our custom linked list class
+
 using namespace std;
 
 int main(int argc, char** argv)
@@ -28,7 +29,7 @@ int main(int argc, char** argv)
         // switch on the command we read from the file
 		switch (cmd)
 		{
-        // if the cmd requires a parameter, read it from the file and call the 
+        // if the cmd requires a parameter, read it from the file and call the
         // associated function
 		case 1:
 			input >> argument;
@@ -45,9 +46,9 @@ int main(int argc, char** argv)
             if(traversal_data != NULL)
             {
                 cout << "inorder traveral: ";
-                for (std::vector<int>::const_iterator i = traversal_data->begin(); 
-                     i != traversal_data->end(); 
-                     ++i)     
+                for (std::vector<int>::const_iterator i = traversal_data->begin();
+                     i != traversal_data->end();
+                     ++i)
                 {
                     std::cout << *i << ' ';
                 }
@@ -60,9 +61,9 @@ int main(int argc, char** argv)
             if(traversal_data != NULL)
             {
                 cout << "postorder traveral: ";
-                for (std::vector<int>::const_iterator i = traversal_data->begin(); 
-                     i != traversal_data->end(); 
-                     ++i)     
+                for (std::vector<int>::const_iterator i = traversal_data->begin();
+                     i != traversal_data->end();
+                     ++i)
                 {
                     std::cout << *i << ' ';
                 }
@@ -75,9 +76,9 @@ int main(int argc, char** argv)
             if(traversal_data != NULL)
             {
                 cout << "preorder traveral: ";
-                for (std::vector<int>::const_iterator i = traversal_data->begin(); 
-                     i != traversal_data->end(); 
-                     ++i)     
+                for (std::vector<int>::const_iterator i = traversal_data->begin();
+                     i != traversal_data->end();
+                     ++i)
                 {
                     std::cout << *i << ' ';
                 }
