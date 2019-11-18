@@ -4,6 +4,8 @@
 #include <cstddef>
 #include <iostream>
 #include <cstdlib>
+#include <algorithm>
+#include <bits/stdc++.h> 
 #include "node.hpp"
 
 template<class T>
@@ -74,6 +76,7 @@ private:
 
     // Inorder Node - function to return inorder node for use in removing nodes with two children.
     Node<T>* inorderNode(Node<T>*);
+	
  };
 
 template<class T>
@@ -97,10 +100,10 @@ template<class T>
 std::vector<T>* BST<T>::inorder()
 {
     std::vector<T>* save_vector = new std::vector<T>;                   // Stores the tree as we walk it.
-
+	
     inorderHelper(save_vector, root);
-
-    return save_vector;
+	
+	return save_vector;
 }
 
 template<class T>
@@ -141,7 +144,7 @@ void BST<T>::preorderHelper(std::vector<T>* in_vector, Node<T>* incoming_node)
 
 
 template<class T>
- std::vector<T> * BST<T>::postorder()
+std::vector<T> * BST<T>::postorder()
 {
     std::vector<T> *save_vector = new std::vector<T>;
 
@@ -182,7 +185,7 @@ Node<T>* BST<T>::insertHelper(int data, Node<T>* incoming_node)
         return newNode;
     }
     else
-    if (incoming_node->get_data() < data) {                                         // If not NULL, we need to check if the node should go left or right and insert accordingly.
+    if (incoming_node->get_data() > data) {                                         // If not NULL, we need to check if the node should go left or right and insert accordingly.
         incoming_node->set_left(insertHelper(data, incoming_node->get_left()));     // If less, go down the left tree.
     }
     else {                                                                          // Go down the right tree if not less (all other cases).
@@ -217,57 +220,53 @@ Node<T>* BST<T>::searchHelper(T in_data, Node<T>* incoming_node)
 template<class T>
 void BST<T>::remove(T in_val)
 {
-    if (root == NULL) {                                 // If root is NULL list is empt so just bail out.
-        return;
-    }
-    else                                                // Otherwise, if the value is bigger than what's in the root, traverse right sub-tree.
-    if (in_val > root->get_data()) {
-        root = root->get_right();
-        remove(in_val);
-    }
-    else                                                // Less than root, so traverse the left sub-tree.
-    if (in_val < root->get_data()) {
-        root = root->get_left();
-        remove(in_val);
-    }
-    else {                                              // Now have a value equal to what we want to remove or not in the tree. Deal with if in the tree here.
-        // If the node has no children.
-        if (root->get_left() == NULL && root->get_right() == NULL) {
-            delete root;
-            root = NULL;
-        }
+	root = removeHelper(in_val, root);
+}
 
-        // Has one child with left NULL.
-        else
-        if (root->get_left() == NULL) {
-            Node<T>* temp = new Node<T>;
-
-            temp = root;
-            root = root->get_right();
-            delete temp;
-        }
-
-        // Has one child with right NULL.
-        else
-        if (root->get_right() == NULL) {
-            Node<T>* temp = new Node<T>;
-
-            temp = root;
-            root = root->get_left();
-            delete temp;
-        }
-
-        // Last case is if two children exist.
-        else {
-            Node<T>* temp = minNode(root->get_right());
-            int temp_data = temp->get_data();
-            root->set_data(temp_data);
-            root = root->get_right();
-            remove(temp_data);
-        }
-    }
-
-    return;
+template<class T>
+Node<T>* BST<T>::removeHelper(T in_data, Node<T>* in_node)
+{
+    if (root == NULL) {                                
+		return NULL;
+	}
+	else 
+	if (in_node->get_data() > in_data) {
+		in_node->set_left(removeHelper(in_data, in_node->get_left()));
+	}
+	else
+	if (in_node->get_data() < in_data) {
+		in_node->set_right(removeHelper(in_data, in_node->get_right()));
+	}
+	else {
+		if (in_node->get_left() == NULL && in_node->get_right() == NULL) {	// No children
+			delete in_node;
+			in_node == NULL;
+		}
+		else
+		if (in_node->get_left() == NULL) {									// Right child
+			Node<T> * temp = in_node;
+			in_node = in_node->get_right();
+			delete temp;
+		}
+		else
+		if (in_node->get_right() == NULL) {									// Left child
+			Node<T> * temp = in_node;
+			in_node = in_node->get_left();
+			delete temp;
+		}
+		else {
+			Node<T>* temp;
+			int new_data;
+			
+			temp = minNode(in_node->get_right());
+			new_data = temp->get_data();
+			in_node->set_data(new_data);
+			in_node->set_right(removeHelper(temp->get_data(), in_node->get_right()));
+		}
+		
+	}
+	
+	return in_node;
 }
 
 template<class T>
